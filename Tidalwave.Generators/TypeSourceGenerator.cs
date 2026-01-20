@@ -30,7 +30,7 @@ public class TypeSourceGenerator : ISourceGenerator {
         }
     }
 
-    public string CreateTypeSource(string typeName, string alias) {
+    private static string CreateTypeSource(string typeName, string alias) {
         return $$"""
                  using System;
                  using System.Runtime.CompilerServices;
@@ -38,48 +38,127 @@ public class TypeSourceGenerator : ISourceGenerator {
                  namespace Tidalwave {
                      public ref partial struct WriteContext {
                          [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                         public void Add{{typeName}}({{alias}} value) {
-                             EnsureSpace(TypeBitSizes.{{typeName}}Size, "{{alias}}");
-                             Write{{typeName}}(value);
+                         public void Write{{typeName}}({{alias}} value) {
+                             ThrowIfNoSpace(TypeBitSizes.{{typeName}}Size, "{{alias}}");
+                             _Write{{typeName}}(value);
                          }
                          
                          [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                         public void Add({{alias}} value) {
-                             EnsureSpace(TypeBitSizes.{{typeName}}Size, "{{alias}}");
-                             Write{{typeName}}(value);
+                         public void Write({{alias}} value) {
+                             ThrowIfNoSpace(TypeBitSizes.{{typeName}}Size, "{{alias}}");
+                             _Write{{typeName}}(value);
                          }
                  
                          [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                         public void Add{{typeName}}s(ReadOnlySpan<{{alias}}> values) {
+                         public void Write{{typeName}}s(ReadOnlySpan<{{alias}}> values) {
                              int bitsNeeded = values.Length * TypeBitSizes.{{typeName}}Size + TypeBitSizes.IntSize;
-                             EnsureSpace(bitsNeeded, "{{alias}} array");
-                             WriteInt(values.Length);
-                             Write{{typeName}}s(values);
+                             ThrowIfNoSpace(bitsNeeded, "{{alias}} array");
+                             _WriteInt(values.Length);
+                             _Write{{typeName}}s(values);
                          }
                          
                          [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                         public void Add(ReadOnlySpan<{{alias}}> values) {
+                         public void Write(Span<{{alias}}> values) {
                              int bitsNeeded = values.Length * TypeBitSizes.{{typeName}}Size + TypeBitSizes.IntSize;
-                             EnsureSpace(bitsNeeded, "{{alias}} array");
-                             WriteInt(values.Length);
-                             Write{{typeName}}s(values);
+                             ThrowIfNoSpace(bitsNeeded, "{{alias}} array");
+                             _WriteInt(values.Length);
+                             _Write{{typeName}}s(values);
                          }
                  
                          [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                         public void Add{{typeName}}sWithoutLength(ReadOnlySpan<{{alias}}> values) {
+                         public void Write{{typeName}}sWithoutLength(ReadOnlySpan<{{alias}}> values) {
                              int bitsNeeded = values.Length * TypeBitSizes.{{typeName}}Size;
-                             EnsureSpace(bitsNeeded, "{{alias}} array without length");
-                             Write{{typeName}}s(values);
+                             ThrowIfNoSpace(bitsNeeded, "{{alias}} array without length");
+                             _Write{{typeName}}s(values);
                          }
                          
                          [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                         public void AddWithoutLength(ReadOnlySpan<{{alias}}> values) {
-                             int bitsNeeded = values.Length * TypeBitSizes.{{typeName}}Size;
-                             EnsureSpace(bitsNeeded, "{{alias}} array without length");
-                             Write{{typeName}}s(values);
+                         public void WriteWithoutLength(Span<{{alias}}> values) {
+                             int bitsNeeded = values.Length * TypeBitSizes.{{typeName}}Size + TypeBitSizes.IntSize;
+                             ThrowIfNoSpace(bitsNeeded, "{{alias}} array");
+                             _WriteInt(values.Length);
+                             _Write{{typeName}}s(values);
+                         }
+                     }
+                     
+                     
+                     public ref partial struct ReadContext {
+                         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                         public {{alias}} Read{{typeName}}() {
+                             if (!CheckForSpace(TypeBitSizes.{{typeName}}Size)) { return default; }
+                             return _Read{{typeName}}();
+                         }
+                         
+                         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                         public bool TryRead{{typeName}}(out {{alias}} value) {
+                             if (!CheckForSpace(TypeBitSizes.{{typeName}}Size)) {
+                                 value = default;
+                                 return false;
+                             }
+                             value = _Read{{typeName}}();
+                             return true;
+                         }
+                         
+                         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                         public {{alias}}[] Read{{typeName}}s() {
+                             if (!CheckForSpace(TypeBitSizes.IntSize)) { return Array.Empty<{{alias}}>(); }
+                             int peakedLength = _PeakInt();
+                             int bitsNeeded = peakedLength * TypeBitSizes.{{typeName}}Size + TypeBitSizes.IntSize;
+                             return !CheckForSpace(bitsNeeded) ? Array.Empty<{{alias}}>() : _Read{{typeName}}s(peakedLength);
+                         }
+                         
+                         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                         public bool TryRead{{typeName}}s(out {{alias}}[] values) {
+                             if (!CheckForSpace(TypeBitSizes.IntSize)) {
+                                 values = Array.Empty<{{alias}}>();
+                                 return false;
+                             }
+                             int peakedLength = _PeakInt();
+                             int bitsNeeded = peakedLength * TypeBitSizes.{{typeName}}Size + TypeBitSizes.IntSize;
+                             if (!CheckForSpace(bitsNeeded)) {
+                                 values = Array.Empty<{{alias}}>();
+                                 return false;
+                             }
+                             values = _Read{{typeName}}s(peakedLength);
+                             return true;
+                         }
+                 
+                         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                         public {{alias}}[] Read{{typeName}}s(int count) {
+                             int bitsNeeded = count * TypeBitSizes.{{typeName}}Size;
+                             return !CheckForSpace(bitsNeeded) ? Array.Empty<{{alias}}>() : _Read{{typeName}}s(count);
+                         }
+                         
+                         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                         public bool TryRead{{typeName}}s(int count, out {{alias}}[] values) {
+                             int bitsNeeded = count * TypeBitSizes.{{typeName}}Size;
+                             if (!CheckForSpace(bitsNeeded)) {
+                                 values = Array.Empty<{{alias}}>();
+                                 return false;
+                             }
+                             values = _Read{{typeName}}s(count);
+                             return true;
+                         }
+                         
+                         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                         public {{alias}} Peak{{typeName}}() {
+                             if (!CheckForSpace(TypeBitSizes.{{typeName}}Size)) { return default; }
+                             return _Peak{{typeName}}();
+                         }
+                 
+                         [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                         public bool TryPeak{{typeName}}(out {{alias}} value) {
+                             if (!CheckForSpace(TypeBitSizes.{{typeName}}Size)) {
+                                 value = default;
+                                 return false;
+                             }
+                 
+                             value = _Peak{{typeName}}();
+                             return true;
                          }
                      }
                  }
+                 
                  """;
     }
 }

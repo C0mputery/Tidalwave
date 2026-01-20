@@ -1,8 +1,5 @@
 using System;
-using System.Buffers.Binary;
 using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Text;
 
 namespace Tidalwave {
     public ref partial struct WriteContext {
@@ -68,10 +65,10 @@ namespace Tidalwave {
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void WriteBool(bool value) { WriteBit(value); }
+        private void _WriteBool(bool value) { WriteBit(value); }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void WriteBools(ReadOnlySpan<bool> values) {
+        public void _WriteBools(ReadOnlySpan<bool> values) {
             const int numberOfValuesInUlong = TypeBitSizes.ULongSize / TypeBitSizes.BoolSize;
             int count = values.Length;
             int processed = 0;
@@ -100,10 +97,10 @@ namespace Tidalwave {
         }
     
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void WriteByte(byte value) { WriteBits(value, TypeBitSizes.ByteSize); }
+        private void _WriteByte(byte value) { WriteBits(value, TypeBitSizes.ByteSize); }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void WriteBytes(ReadOnlySpan<byte> values) {
+        public void _WriteBytes(ReadOnlySpan<byte> values) {
             const int numberOfValuesInUlong = TypeBitSizes.ULongSize / TypeBitSizes.ByteSize;
             int count = values.Length;
             int processed = 0;
@@ -128,10 +125,10 @@ namespace Tidalwave {
         }
     
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void WriteSByte(sbyte value) { WriteBits((byte)value, TypeBitSizes.SByteSize); }
+        private void _WriteSByte(sbyte value) { WriteBits((byte)value, TypeBitSizes.SByteSize); }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void WriteSBytes(ReadOnlySpan<sbyte> values) {
+        public void _WriteSBytes(ReadOnlySpan<sbyte> values) {
             const int numberOfValuesInUlong = TypeBitSizes.ULongSize / TypeBitSizes.SByteSize;
             int count = values.Length;
             int processed = 0;
@@ -156,10 +153,10 @@ namespace Tidalwave {
         }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void WriteShort(short value) { WriteBits((ushort)value, TypeBitSizes.ShortSize); }
+        private void _WriteShort(short value) { WriteBits((ushort)value, TypeBitSizes.ShortSize); }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void WriteShorts(ReadOnlySpan<short> values) {
+        public void _WriteShorts(ReadOnlySpan<short> values) {
             const int numberOfValuesInUlong = TypeBitSizes.ULongSize / TypeBitSizes.ShortSize;
             int count = values.Length;
             int processed = 0;
@@ -184,10 +181,10 @@ namespace Tidalwave {
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void WriteUShort(ushort value) { WriteBits(value, TypeBitSizes.UShortSize); }
+        private void _WriteUShort(ushort value) { WriteBits(value, TypeBitSizes.UShortSize); }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void WriteUShorts(ReadOnlySpan<ushort> values) {
+        public void _WriteUShorts(ReadOnlySpan<ushort> values) {
             const int numberOfValuesInUlong = TypeBitSizes.ULongSize / TypeBitSizes.UShortSize;
             int count = values.Length;
             int processed = 0;
@@ -212,10 +209,10 @@ namespace Tidalwave {
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void WriteInt(int value) { WriteBits((uint)value, TypeBitSizes.IntSize); }
+        private void _WriteInt(int value) { WriteBits((uint)value, TypeBitSizes.IntSize); }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void WriteInts(ReadOnlySpan<int> values) {
+        private void _WriteInts(ReadOnlySpan<int> values) {
             const int numberOfValuesInUlong = TypeBitSizes.ULongSize / TypeBitSizes.IntSize;
             int count = values.Length;
             int processed = 0;
@@ -240,10 +237,10 @@ namespace Tidalwave {
         }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void WriteUInt(uint value) { WriteBits(value, TypeBitSizes.UIntSize); }
+        private void _WriteUInt(uint value) { WriteBits(value, TypeBitSizes.UIntSize); }
     
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void WriteUInts(ReadOnlySpan<uint> values) {
+        private void _WriteUInts(ReadOnlySpan<uint> values) {
             const int numberOfValuesInUlong = TypeBitSizes.ULongSize / TypeBitSizes.UIntSize;
             int count = values.Length;
             int processed = 0;
@@ -268,29 +265,29 @@ namespace Tidalwave {
         }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void WriteLong(long value) { WriteBits((ulong)value, TypeBitSizes.LongSize); }
+        private void _WriteLong(long value) { WriteBits((ulong)value, TypeBitSizes.LongSize); }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void WriteLongs(ReadOnlySpan<long> values) {
+        private void _WriteLongs(ReadOnlySpan<long> values) {
             foreach (long value in values) { WriteBits((ulong)value, TypeBitSizes.LongSize); }
         }
     
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void WriteULong(ulong value) { WriteBits(value, TypeBitSizes.ULongSize); }
+        private void _WriteULong(ulong value) { WriteBits(value, TypeBitSizes.ULongSize); }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void WriteULongs(ReadOnlySpan<ulong> values) {
+        private void _WriteULongs(ReadOnlySpan<ulong> values) {
             foreach (ulong value in values) { WriteBits(value, TypeBitSizes.ULongSize); }
         }
     
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void WriteFloat(float value) {
+        private void _WriteFloat(float value) {
             uint asInt = (uint)BitConverter.SingleToInt32Bits(value);
             WriteBits(asInt, TypeBitSizes.FloatSize);
         }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void WriteFloats(ReadOnlySpan<float> values) {
+        private void _WriteFloats(ReadOnlySpan<float> values) {
             const int numberOfValuesInUlong = TypeBitSizes.ULongSize / TypeBitSizes.FloatSize;
             int count = values.Length;
             int processed = 0;
@@ -317,13 +314,13 @@ namespace Tidalwave {
         }
     
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void WriteDouble(double value) {
+        private void _WriteDouble(double value) {
             ulong asLong = (ulong)BitConverter.DoubleToInt64Bits(value);
             WriteBits(asLong, TypeBitSizes.DoubleSize);
         }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void WriteDoubles(ReadOnlySpan<double> values) {
+        private void _WriteDoubles(ReadOnlySpan<double> values) {
             foreach (double value in values) {
                 ulong asLong = (ulong)BitConverter.DoubleToInt64Bits(value);
                 WriteBits(asLong, TypeBitSizes.DoubleSize);
@@ -331,7 +328,7 @@ namespace Tidalwave {
         }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void EnsureSpace(int bitsNeeded, string forWhat) {
+        public void ThrowIfNoSpace(int bitsNeeded, string forWhat) {
             if (BitsRemaining < bitsNeeded) { throw new InsufficientWriteSpaceException(forWhat, bitsNeeded, BitsRemaining); }
         }
         
