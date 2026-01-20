@@ -26,7 +26,7 @@ public class TypeSourceGenerator : ISourceGenerator {
 
         foreach ((string typeName, string alias) in types) {
             string source = CreateTypeSource(typeName, alias);
-            context.AddSource($"Tidalwave.Core.Contexts.Types.{typeName}.g.cs", SourceText.From(source, Encoding.UTF8));
+            context.AddSource($"Tidalwave.Contexts.Types.{typeName}.g.cs", SourceText.From(source, Encoding.UTF8));
         }
     }
 
@@ -35,7 +35,7 @@ public class TypeSourceGenerator : ISourceGenerator {
                  using System;
                  using System.Runtime.CompilerServices;
                  
-                 namespace Tidalwave.Core {
+                 namespace Tidalwave {
                      public ref partial struct WriteContext {
                          [MethodImpl(MethodImplOptions.AggressiveInlining)]
                          public void Write{{typeName}}({{alias}} value) {

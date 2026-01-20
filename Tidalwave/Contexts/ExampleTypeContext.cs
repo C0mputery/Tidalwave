@@ -2,7 +2,7 @@
 
 using System.Runtime.CompilerServices;
 
-namespace Tidalwave.Core {
+namespace Tidalwave {
     public ref partial struct WriteContext {
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void WriteBool(bool value) {

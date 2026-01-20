@@ -1,8 +1,10 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tidalwave.Core", "Tidalwave.Core\Tidalwave.Core.csproj", "{FC7E4CF0-0480-4944-B141-8FBA4D0006CA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tidalwave", "Tidalwave\Tidalwave.csproj", "{FC7E4CF0-0480-4944-B141-8FBA4D0006CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tidalwave.Core.Generator", "Tidalwave.Core.Generator\Tidalwave.Core.Generator.csproj", "{DE27D01B-1209-44A5-AFBC-974DA97417FB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tidalwave.Generator", "Tidalwave.Generator\Tidalwave.Generator.csproj", "{DE27D01B-1209-44A5-AFBC-974DA97417FB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tidalwave.Benchmarks", "Tidalwave.Benchmarks\Tidalwave.Benchmarks.csproj", "{A9E42966-0560-438E-B40A-130D2D7DEB42}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,6 +40,18 @@ Global
 		{DE27D01B-1209-44A5-AFBC-974DA97417FB}.Release|x64.Build.0 = Release|Any CPU
 		{DE27D01B-1209-44A5-AFBC-974DA97417FB}.Release|x86.ActiveCfg = Release|Any CPU
 		{DE27D01B-1209-44A5-AFBC-974DA97417FB}.Release|x86.Build.0 = Release|Any CPU
+		{A9E42966-0560-438E-B40A-130D2D7DEB42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9E42966-0560-438E-B40A-130D2D7DEB42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9E42966-0560-438E-B40A-130D2D7DEB42}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{A9E42966-0560-438E-B40A-130D2D7DEB42}.Debug|x64.Build.0 = Debug|Any CPU
+		{A9E42966-0560-438E-B40A-130D2D7DEB42}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A9E42966-0560-438E-B40A-130D2D7DEB42}.Debug|x86.Build.0 = Debug|Any CPU
+		{A9E42966-0560-438E-B40A-130D2D7DEB42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9E42966-0560-438E-B40A-130D2D7DEB42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9E42966-0560-438E-B40A-130D2D7DEB42}.Release|x64.ActiveCfg = Release|Any CPU
+		{A9E42966-0560-438E-B40A-130D2D7DEB42}.Release|x64.Build.0 = Release|Any CPU
+		{A9E42966-0560-438E-B40A-130D2D7DEB42}.Release|x86.ActiveCfg = Release|Any CPU
+		{A9E42966-0560-438E-B40A-130D2D7DEB42}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

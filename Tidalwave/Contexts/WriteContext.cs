@@ -328,10 +328,10 @@ namespace Tidalwave {
         }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void ThrowIfNoSpace(int bitsNeeded, string forWhat) {
+        private void ThrowIfNoSpace(int bitsNeeded, string forWhat) {
             if (BitsRemaining < bitsNeeded) { throw new InsufficientWriteSpaceException(forWhat, bitsNeeded, BitsRemaining); }
         }
         
-        public class InsufficientWriteSpaceException : Exception { public InsufficientWriteSpaceException(string failedThing, int requiredBits, int availableBits) : base($"Insufficient space to write {failedThing}. Required bits: {requiredBits}, Available bits: {availableBits}.") { } }
+        private class InsufficientWriteSpaceException : Exception { public InsufficientWriteSpaceException(string failedThing, int requiredBits, int availableBits) : base($"Insufficient space to write {failedThing}. Required bits: {requiredBits}, Available bits: {availableBits}.") { } }
     }
 }
