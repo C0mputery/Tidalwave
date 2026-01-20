@@ -330,14 +330,11 @@ namespace Tidalwave {
             }
         }
         
-        public class InsufficientWriteSpaceException : Exception { public InsufficientWriteSpaceException(string failedThing, int requiredBits, int availableBits) : base($"Insufficient space to write {failedThing}. Required bits: {requiredBits}, Available bits: {availableBits}.") { } }
-    }
-
-    public ref partial struct WriteContext {
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void EnsureSpace(int bitsNeeded, string forWhat) {
-            if (BitsRemaining < bitsNeeded) {
-                throw new InsufficientWriteSpaceException(forWhat, bitsNeeded, BitsRemaining);
-            }
+            if (BitsRemaining < bitsNeeded) { throw new InsufficientWriteSpaceException(forWhat, bitsNeeded, BitsRemaining); }
         }
+        
+        public class InsufficientWriteSpaceException : Exception { public InsufficientWriteSpaceException(string failedThing, int requiredBits, int availableBits) : base($"Insufficient space to write {failedThing}. Required bits: {requiredBits}, Available bits: {availableBits}.") { } }
     }
 }
