@@ -1,9 +1,10 @@
-﻿using System;
+using BenchmarkDotNet.Running;
+using Tidalwave.Benchmarks;
 
-namespace Tidalwave.Benchmarks {
-    internal class Program {
-        static void Main(string[] args) {
-            Console.WriteLine("Hello World!");
-        }
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        BenchmarkRunner.Run<ContextBenchmarks>();
     }
 }
