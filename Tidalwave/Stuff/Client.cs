@@ -1,5 +1,5 @@
 namespace Tidalwave {
-    public interface INode {
+    public class Client : Node {
         
     }
 }

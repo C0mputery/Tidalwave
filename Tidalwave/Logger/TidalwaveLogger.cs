@@ -110,5 +110,10 @@ namespace Tidalwave.Logger {
         /// <param name="time">The time to format.</param>
         /// <returns>The formatted timestamp.</returns>
         private static string GetTimestamp(DateTime time) { return time.ToString(timestampFormat); }
+
+        public static void LogDebug(string message) { Log(LogType.Debug, message); }
+        public static void LogInfo(string message) { Log(LogType.Info, message); }
+        public static void LogWarning(string message) { Log(LogType.Warning, message); }
+        public static void LogError(string message) { Log(LogType.Error, message); }
     }
 }

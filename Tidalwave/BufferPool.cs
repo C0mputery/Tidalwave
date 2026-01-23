@@ -1,11 +1,13 @@
+using System;
 using System.Collections.Concurrent;
+using System.Runtime.InteropServices;
 
 namespace Tidalwave {
     public static class BufferPool {
-        private static int _bufferSizeInBytes = 1024;
+        public static int BufferSizeInBytes { get; private set; } = 1024;
         public static void Initialize(int bufferSizeInBytes, int initialPoolSize) {
-            _bufferSizeInBytes = bufferSizeInBytes;
-            int ulongArraySize = _bufferSizeInBytes / sizeof(ulong);
+            BufferSizeInBytes = bufferSizeInBytes;
+            int ulongArraySize = BufferSizeInBytes / sizeof(ulong);
             for (int i = 0; i < initialPoolSize; i++) { Pool.Push(new ulong[ulongArraySize]); }
         }
 
@@ -13,7 +15,13 @@ namespace Tidalwave {
         
         public static ulong[] Rent() { 
             if (Pool.TryPop(out ulong[]? buffer)) { return buffer; }
-            return new ulong[_bufferSizeInBytes];
+            return new ulong[BufferSizeInBytes];
+        }
+        
+        public static byte[] RentAsBytes() {
+            ulong[] buffer = Rent();
+            Span<byte> a = MemoryMarshal.AsBytes<ulong>(buffer);
+            return a.ToArray();
         }
         
         public static void Return(ulong[] buffer) { Pool.Push(buffer); }

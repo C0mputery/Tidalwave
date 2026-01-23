@@ -86,6 +86,7 @@ namespace Tidalwave {
 
         /// <summary>
         /// Gets a span of bytes representing the written data in the buffer.
+        /// This will include garbage bits in the last byte if the total number of bits written is not a multiple of 8.
         /// </summary>
         /// <returns></returns>
         public Span<byte> ToByte() {
